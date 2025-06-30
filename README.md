@@ -260,6 +260,11 @@ class Net(nn.Module):
 [Epoch 5] loss: 0.0430 → 0.0442
 </pre>
 
+<p align="center">
+    ![image](https://github.com/user-attachments/assets/f9480972-d149-4539-8bba-d3ae4ca104da)
+</p>
+<p align="center"><em>Figure: Training Loss Over Time (10 Epochs)</em></p>
+
 <p><strong>Test Accuracy:</strong> <code>97.25%</code></p>
 
 <h3><strong>Step 4: Model Improvement Efforts</strong></h3>
@@ -312,11 +317,6 @@ class Net(nn.Module):
 [Epoch 9] loss: 0.0390 → 0.0428
 [Epoch 10] loss: 0.0337 → 0.0393
 </pre>
-
-<p align="center">
-  <img src="1355bbaf-34d8-4fd0-beee-f9a98c2c2520.png" width="400px">
-</p>
-<p align="center"><em>Figure: Training Loss Over Time (10 Epochs)</em></p>
 
 <p><strong>Final Test Accuracy:</strong> <code>97.57%</code> 🎯</p>
 
