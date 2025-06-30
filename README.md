@@ -2,14 +2,28 @@
 
 <p><strong>Author:</strong> Seungmi Kim (kimsm6397@gmail.com)<br></p>
 <p><strong>Repository:</strong> <code>aws-aiml-scholarship-ml-fundamentals-su25<br></code></p>
-<p><strong>Last Updated:</strong> May 28, 2025</p>
+<p><strong>Last Updated:</strong> June 29, 2025</p>
+
+<p>
+Welcome to the <code>aws-aiml-scholarship-ml-fundamentals-su25</code> repository. This repository includes projects completed as part of the <strong>Machine Learning Fundamentals Nanodegree</strong> from Udacity, awarded through the <strong>AWS Advanced AI & ML Scholarship Program (Summer 2025 Cohort)</strong>. This scholarship was granted to the top 500 global performers from the AWS AI & ML Scholarship Program: AI Programming with Python Nanodegree for Fall 2024.
+</p>
+
+<p><strong>Program Highlights</strong></p>
+<ul>
+  <li>Selected among the top 500 global scholars to receive a full scholarship for Udacity’s ML Fundamentals Nanodegree.</li>
+  <li>Engaged in advanced machine learning topics, including deep learning, scalable ML pipelines, and deployment using <strong>Amazon SageMaker</strong>.</li>
+  <li>Completed hands-on projects focused on production-ready ML workflows, data pipelines, and inference optimization.</li>
+  <li>Received mentorship from industry professionals and AWS experts to deepen practical understanding of real-world ML systems.</li>
+  <li>Developed, trained, and deployed cloud-native machine learning applications using state-of-the-art tools.</li>
+</ul>
+
 
 <p><strong>List of Projects</strong></p>
 <ul>
     <li><a href="#project1">Project 1: Predict Bike Sharing Demand with AutoGluon</a></li>
     <li><a href="#project2">Project 2: Developing a Handwritten Digits Classifier with PyTorch</a></li>
-    <li><a href="#project3">Project 3: </a></li>
-    <li><a href="#project4">Project 4: </a></li>
+    <li><a href="#project3">Project 3: Landmark Classification & Tagging for Social Media</a></li>
+    <li><a href="#project4">Project 4: Build a ML Workflow For Scones Unlimited On Amazon SageMaker</a></li>
 </ul>
 
 <br><br>
@@ -261,7 +275,7 @@ class Net(nn.Module):
 </pre>
 
 <p align="center">
-    ![image](https://github.com/user-attachments/assets/f9480972-d149-4539-8bba-d3ae4ca104da)
+  <img src="https://github.com/user-attachments/assets/f7b4ce54-c358-446c-82e8-98ad025d96dc" width="400px">
 </p>
 <p align="center"><em>Figure: Training Loss Over Time (10 Epochs)</em></p>
 
