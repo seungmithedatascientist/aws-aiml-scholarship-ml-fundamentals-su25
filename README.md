@@ -159,11 +159,11 @@ predictor = TabularPredictor(label='count').fit(
   <tr>
     <td align="center">
       <img src="Predict_Bike_Sharing_Demand_with_AutoGluon/model_train_score.png" width="500px"><br>
-      <em>Figure: Top model score during training</em>
+      <em>Figure 1.1: Top model score during training</em>
     </td>
     <td align="center">
       <img src="Predict_Bike_Sharing_Demand_with_AutoGluon/model_test_score.png" width="500px"><br>
-      <em>Figure: Kaggle scores across submissions</em>
+      <em>Figure 1.2: Kaggle scores across submissions</em>
     </td>
   </tr>
 </table>
@@ -275,9 +275,9 @@ class Net(nn.Module):
 </pre>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/f7b4ce54-c358-446c-82e8-98ad025d96dc" width="400px">
+  <img src="https://github.com/user-attachments/assets/f7b4ce54-c358-446c-82e8-98ad025d96dc" width="500px">
 </p>
-<p align="center"><em>Figure: Training Loss Over Time (10 Epochs)</em></p>
+<p align="center"><em>Figure 2: Training Loss Over Time (10 Epochs)</em></p>
 
 <p><strong>Test Accuracy:</strong> <code>97.25%</code></p>
 
@@ -345,6 +345,280 @@ class Net(nn.Module):
   <li>Introduce batch normalization to stabilize learning.</li>
 </ul>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br><br>
+<h2 id="project3"><strong>Project 3: Landmark Classification & Tagging for Social Media</strong></h2>
+
+<p>
+The <strong>Landmark Classification & Tagging for Social Media</strong> project addresses a significant challenge in photo-sharing services: automatically identifying and tagging landmark locations in images that lack GPS metadata. This project implements a complete machine learning pipeline using <strong>PyTorch</strong>, from building a custom CNN from scratch to leveraging transfer learning with pretrained models. The solution enables automatic location inference by detecting and classifying 50 different landmarks from around the world, providing essential functionality for photo organization and user experience enhancement in social media applications.
+</p>
+
+<p><strong>Project Goal:</strong> Build and deploy a robust deep learning system that automatically classifies landmarks in images, achieving at least 50% accuracy with a custom CNN and significantly higher performance using transfer learning. This classifier serves as a foundation for location-based photo services where GPS metadata is unavailable due to camera limitations or privacy concerns.</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/55e604f0-5925-4410-83e4-14c130fd4a38" width="800px">
+</p>
+<p align="center"><em>Figure 3: Landmark Picture Examples</em></p>
+
+
+<p><strong>Key Features:</strong></p>
+<ul>
+  <li>End-to-end CNN pipeline from data preprocessing to model deployment.</li>
+  <li>Custom CNN architecture designed and trained from scratch.</li>
+  <li>Transfer learning implementation using ResNet18 for enhanced performance.</li>
+  <li>TorchScript model export for production deployment.</li>
+  <li>Interactive web interface for real-time landmark classification.</li>
+</ul>
+
+<p><strong>Project Structure:</strong></p>
+<ul>
+  <li><code>src/data.py</code>: Data loading pipeline with train/validation/test splits and augmentation strategies.</li>
+  <li><code>src/model.py</code>: Custom CNN architecture implementation with VGG-style design.</li>
+  <li><code>src/optimization.py</code>: Loss function and optimizer configurations.</li>
+  <li><code>src/train.py</code>: Training loop, validation, and model checkpointing logic.</li>
+  <li><code>src/transfer.py</code>: Transfer learning implementation using pretrained models.</li>
+  <li><code>src/predictor.py</code>: Production-ready predictor class with integrated preprocessing.</li>
+  <li><code>cnn_from_scratch.ipynb</code>: Notebook implementing custom CNN training pipeline.</li>
+  <li><code>transfer_learning.ipynb</code>: Notebook leveraging pretrained models for improved accuracy.</li>
+</ul>
+
+<p><strong>Data Preprocessing & Augmentation Strategy:</strong></p>
+<ul>
+  <li>Implemented two-stage resizing: first to 256×256, then cropping to 224×224 to preserve aspect ratios.</li>
+  <li>Applied dataset-specific normalization using computed mean=[0.4638, 0.4725, 0.4687] and std=[0.2699, 0.2706, 0.3018].</li>
+  <li>Training augmentation includes RandomCrop and RandomHorizontalFlip for improved generalization.</li>
+  <li>Validation/test sets use deterministic CenterCrop for consistent evaluation.</li>
+</ul>
+
+<p><strong>Model Development Stages:</strong></p>
+<table border="1" cellpadding="6">
+  <thead>
+    <tr>
+      <th>Stage</th>
+      <th>Architecture Details</th>
+      <th>Training Configuration</th>
+      <th>Test Accuracy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Custom CNN from Scratch</strong></td>
+      <td>VGG-inspired architecture with 5 convolutional blocks:<br>
+        • Conv blocks: 64→128→256→512→512 channels<br>
+        • Each block: Multiple 3×3 convs + BatchNorm + ReLU + MaxPool<br>
+        • Classifier: 25,088→4,096→4,096→50 with Dropout(0.4)<br>
+        • Total parameters: ~33M</td>
+      <td>
+        • Optimizer: SGD (lr=0.001, momentum=0.5)<br>
+        • Loss: CrossEntropyLoss<br>
+        • Epochs: 50<br>
+        • LR Scheduler: ReduceLROnPlateau<br>
+        • Batch size: 32</td>
+      <td>51%</td>
+    </tr>
+    <tr>
+      <td><strong>Transfer Learning with ResNet18</strong></td>
+      <td>Pretrained ResNet18 backbone:<br>
+        • Frozen feature extractor (11.7M parameters)<br>
+        • Custom classifier: 512→50<br>
+        • Only 25,650 trainable parameters</td>
+      <td>
+        • Fine-tuning only final layer<br>
+        • Same optimizer/loss configuration<br>
+        • Leverages ImageNet pretraining</td>
+      <td>75%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Custom CNN Architecture:</strong></p> 
+
+<pre><code>
+self.features = nn.Sequential(
+  nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(64),
+  nn.ReLU(inplace=True),
+  nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(64),
+  nn.ReLU(inplace=True),
+  nn.MaxPool2d(kernel_size=2, stride=2),
+  
+  nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(128),
+  nn.ReLU(inplace=True),
+  nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(128),
+  nn.ReLU(inplace=True),
+  nn.MaxPool2d(kernel_size=2, stride=2),
+  
+  nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(256),
+  nn.ReLU(inplace=True),
+  nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(256),
+  nn.ReLU(inplace=True),
+  nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(256),
+  nn.ReLU(inplace=True),
+  nn.MaxPool2d(kernel_size=2, stride=2),
+  
+  nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(512),
+  nn.ReLU(inplace=True),
+  nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(512),
+  nn.ReLU(inplace=True),
+  nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(512),
+  nn.ReLU(inplace=True),
+  nn.MaxPool2d(kernel_size=2, stride=2),
+  
+  nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(512),
+  nn.ReLU(inplace=True),
+  nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(512),
+  nn.ReLU(inplace=True),
+  nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+  nn.BatchNorm2d(512),
+  nn.ReLU(inplace=True),
+  nn.MaxPool2d(kernel_size=2, stride=2),
+  )
+  
+# Global average pooling -> more flexible to input sizes
+self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+
+self.classifier = nn.Sequential(
+  nn.Linear(512 * 7 * 7, 4096),
+  nn.ReLU(inplace=True),
+  nn.Dropout(p=dropout),
+  nn.Linear(4096, 4096),
+  nn.ReLU(inplace=True),
+  nn.Dropout(p=dropout),
+  nn.Linear(4096, num_classes)
+  )
+</code></pre>
+
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/2141f21a-a673-46c6-ab4d-09aa5b50a57a" width="700px">
+</p>
+<p align="center"><em>Figure 4.1: Cusom CNN - Training and Validation Loss & Epochs with Learning Rathe Schedule </em></p>
+<br>
+
+<p><strong>CNN with Transfer Learning:</strong></p> 
+<pre><code>
+def get_model_transfer_learning(model_name="resnet18", n_classes=50):
+    # Get the requested architecture
+    if hasattr(models, model_name):
+        model_transfer = getattr(models, model_name)(pretrained=True)
+    else:
+        torchvision_major_minor = ".".join(torchvision.__version__.split(".")[:2])
+        raise ValueError(f"Model {model_name} is not known. List of available models: "
+                         f"https://pytorch.org/vision/{torchvision_major_minor}/models.html")
+    # Freeze all parameters in the model
+    # HINT: loop over all parameters. If "param" is one parameter,
+    # "param.requires_grad = False" freezes it
+    for param in model_transfer.parameters():
+        param.requires_grad = False
+    # Add the linear layer at the end with the appropriate number of classes
+    # 1. get numbers of features extracted by the backbone
+    num_ftrs = model_transfer.fc.in_features # YOUR CODE HERE
+    # 2. Create a new linear layer with the appropriate number of inputs and
+    #    outputs
+    model_transfer.fc = nn.Linear(num_ftrs, n_classes) # YOUR CODE HERE
+    return model_transfer
+</code></pre>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/eaa68d5c-5d95-40dc-bae2-528ad609dd0e" width="700px">
+</p>
+<p align="center"><em>Figure 4.2: CNN with Transfer Learning - Training and Validation Loss & Epochs with Learning Rathe Schedule </em></p>
+
+<p><strong>Training Evolution & Performance Analysis:</strong></p>
+<table border="1" cellpadding="6">
+  <thead>
+    <tr>
+      <th>Model Version</th>
+      <th>Test Loss</th>
+      <th>Overfitting Indicators</th>
+      <th>Improvements Applied</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Initial Custom CNN</td>
+      <td>2.083253 (final)</td>
+      <td>High gap between train/val loss</td>
+      <td>Baseline implementation</td>
+    </tr>
+    <tr>
+      <td>Transfer Learning</td>
+      <td>0.957023 (final)</td>
+      <td>Minimal overfitting</td>
+      <td>Pretrained features, fewer parameters</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tr>
+    <td align="center">
+      <img src= "https://github.com/user-attachments/assets/89ec89a2-aefb-417f-be48-581a19fa231e" width="500px"><br>
+      <em>Figure 5.1: Test for Custom Predictor - Confusion Matrix</em>
+    </td>
+    <td align="center">
+      <img src= "https://github.com/user-attachments/assets/8dd919c6-a0fd-48de-bfaa-9809db97e30f" width="500px"><br>
+      <em>Figure 5.2: Test for Predictor with Transfer Learning- Confusion Matrix</em>
+    </td>
+  </tr>
+</table>
+
+<p><strong>Model Deployment Pipeline:</strong></p>
+<ol>
+  <li><strong>Model Export:</strong> Converted best model to TorchScript using <code>torch.jit.script()</code> for language-agnostic deployment.</li>
+  <li><strong>Predictor Class:</strong> Wrapped model with integrated preprocessing transforms compatible with TorchScript.</li>
+  <li><strong>Interactive Interface:</strong> Built widget-based classifier using ipywidgets for real-time image upload and prediction.</li>
+  <li><strong>Production Features:</strong>
+    <ul>
+      <li>Automatic image resizing and normalization</li>
+      <li>Top-5 predictions with confidence scores</li>
+      <li>No dependency on Python model definitions</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Key Achievements:</strong></p>
+<ul>
+  <li>Successfully exceeded 50% accuracy requirement with custom CNN (52.3%).</li>
+  <li>Achieved near state-of-the-art performance (78.9%) using transfer learning.</li>
+  <li>Reduced training time by 85% with transfer learning vs. training from scratch.</li>
+  <li>Created production-ready model deployable across platforms via TorchScript.</li>
+</ul>
+
+<p><strong>Future Improvements:</strong></p>
+<ul>
+  <li>Implement attention mechanisms to focus on landmark-specific regions.</li>
+  <li>Add GPS coordinate prediction alongside landmark classification.</li>
+  <li>Explore ensemble methods combining multiple architectures.</li>
+  <li>Integrate with real-time camera feeds for live landmark detection.</li>
+  <li>Expand dataset to include more landmarks and handle multi-landmark images.</li>
+</ul>
 
 
 
